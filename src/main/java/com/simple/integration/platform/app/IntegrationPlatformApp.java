@@ -1,0 +1,44 @@
+package com.simple.integration.platform.app;
+
+import java.io.File;
+import java.util.Date;
+
+import org.apache.activemq.broker.BrokerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Import;
+import org.springframework.util.FileSystemUtils;
+
+import com.simple.integration.platform.config.ActiveMqConfig;
+import com.simple.integration.platform.config.CamelConfig;
+import com.simple.integration.platform.config.IntegrationPlatformConfig;
+import com.simple.integration.platform.jms.JmsSender;
+
+@SpringBootApplication
+@Import({IntegrationPlatformConfig.class, CamelConfig.class, ActiveMqConfig.class})
+public class IntegrationPlatformApp {
+
+    private static Logger log = LoggerFactory.getLogger(IntegrationPlatformApp.class);
+    
+    public static void main(String[] args) {
+        BrokerService broker = new BrokerService();
+        try {
+            // configure the broker
+            broker.addConnector("tcp://localhost:61616");
+         
+            broker.start();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        
+        ConfigurableApplicationContext context = SpringApplication.run(new Class<?>[] {IntegrationPlatformApp.class}, args);
+        log.info("Application context ID : " + context.getId());
+        
+        JmsSender jmsSender = (JmsSender) context.getBean("jmsMqSender");
+        jmsSender.sendText("hellooooo " + new Date());
+    }
+}

@@ -1,0 +1,23 @@
+spring:
+    main:
+        show_banner: off
+    application:
+        name: integration-platform
+    activemq:
+        in-memory: true
+        pooled: false
+eureka:
+    instance:
+        hostname: ${host.instance.name}
+        nonSecurePort: ${server.port}
+        leaseRenewalIntervalInSeconds: 10
+    client:
+        serviceUrl:
+            defaultZone: http://127.0.0.1:8761/eureka/
+        healthcheck:
+            enabled: true
+host:
+    instance:
+        name: localhost
+server:
+    port: 8888

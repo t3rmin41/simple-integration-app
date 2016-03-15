@@ -1,0 +1,13 @@
+#Eclipse
+.settings/
+.project
+.classpath
+#Gradle
+.gradle/
+build/
+/bin/
+#ActiveMQ
+/activemq-data/
+#Common
+*log/
+
