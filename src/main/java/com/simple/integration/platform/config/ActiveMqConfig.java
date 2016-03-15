@@ -39,7 +39,7 @@ public class ActiveMqConfig {
     }
 
     //JmsReceiver part
-    @Bean
+    @Bean(name="jmsMqReceiver")
     public JmsReceiver jmsReceiver() {
         return new JmsReceiver();
     }

@@ -12,6 +12,16 @@ public class JmsReceiver implements MessageListener {
 
     private static Logger log = LoggerFactory.getLogger(JmsReceiver.class);
     
+    private String message;
+    
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @Override
     public void onMessage(Message message) {
         if (message instanceof TextMessage) {
@@ -19,11 +29,13 @@ public class JmsReceiver implements MessageListener {
             try {
                 String text = textMessage.getText();
                 System.out.println("Received: " + text);
+                setMessage("Received: " + text);
             } catch (JMSException e) {
                 e.printStackTrace();
             }
         } else {
             System.out.println("Received: " + message);
+            setMessage("Received: " + message);
         }
     }
 
