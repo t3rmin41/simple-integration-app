@@ -4,7 +4,7 @@ buildscript {
         springCloudVersion = '1.0.3.RELEASE'
         hibernateVersion = '4.3.5.Final'
         camelVersion = '2.16.2'
-        activeMqVersion = '5.13.2'
+        activeMqVersion = '5.12.1'
     }
     repositories {
         mavenCentral()
