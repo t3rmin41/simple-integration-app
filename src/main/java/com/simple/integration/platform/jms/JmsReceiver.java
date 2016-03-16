@@ -28,15 +28,14 @@ public class JmsReceiver implements MessageListener {
             TextMessage textMessage = (TextMessage) message;
             try {
                 String text = textMessage.getText();
-                System.out.println("Received: " + text);
                 setMessage("Received: " + text);
             } catch (JMSException e) {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("Received: " + message);
             setMessage("Received: " + message);
         }
+        log.info(this.message);
     }
 
 }

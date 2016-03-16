@@ -29,4 +29,5 @@ public class SimpleController {
         JmsReceiver jmsReceiver = (JmsReceiver) context.getBean("jmsMqReceiver");
         return jmsReceiver.getMessage();
     }
+    
 }

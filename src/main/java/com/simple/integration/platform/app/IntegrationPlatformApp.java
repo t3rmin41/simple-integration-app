@@ -1,14 +1,11 @@
 package com.simple.integration.platform.app;
 
-import java.util.Date;
-
 import org.apache.activemq.broker.BrokerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
 
 import com.simple.integration.platform.config.ActiveMqConfig;
@@ -32,7 +29,7 @@ public class IntegrationPlatformApp {
             log.error(e.getMessage());
         }
         
-        ConfigurableApplicationContext context = SpringApplication.run(new Class<?>[] {IntegrationPlatformApp.class}, args);
+        ApplicationContext context = SpringApplication.run(new Class<?>[] {IntegrationPlatformApp.class}, args);
         log.info("Application context ID : " + context.getId());
     }
 }
