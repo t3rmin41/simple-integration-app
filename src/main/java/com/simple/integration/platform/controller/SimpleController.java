@@ -23,7 +23,7 @@ public class SimpleController {
     }
     
     @RequestMapping(value = "/queue/hello", method = RequestMethod.GET)
-    public String queue() {
+    public String queueHello() {
         JmsSender jmsSender = (JmsSender) context.getBean("jmsMqSender");
         jmsSender.sendText("hellooooo " + new Date());
         JmsReceiver jmsReceiver = (JmsReceiver) context.getBean("jmsMqReceiver");

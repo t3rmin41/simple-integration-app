@@ -15,18 +15,19 @@ public class SimpleRouter extends RouteBuilder {
         
         sampleRoute();
         
+        //Comment out queueRoute() method to use queue without Camel
         queueRoute();
         
         //heartbeat();
     }
 
-    public void sampleRoute() {
+    private void sampleRoute() {
         from("servlet:///sample").
         transform().
         constant("Sample of Camel");
     }
     
-    public void queueRoute() {
+    private void queueRoute() {
         from("activemq:jms.queue").
         to("log:com.simple.integration.platform.router.SimpleRouter?level=INFO").
         to("activemq:jms.queue");
