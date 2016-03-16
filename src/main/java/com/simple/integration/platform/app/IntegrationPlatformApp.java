@@ -34,8 +34,5 @@ public class IntegrationPlatformApp {
         
         ConfigurableApplicationContext context = SpringApplication.run(new Class<?>[] {IntegrationPlatformApp.class}, args);
         log.info("Application context ID : " + context.getId());
-        
-//        JmsSender jmsSender = (JmsSender) context.getBean("jmsMqSender");
-//        jmsSender.sendText("hellooooo " + new Date());
     }
 }
