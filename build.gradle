@@ -30,10 +30,8 @@ targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    maven {
-        // Can't find spring-cloud-build in maven central...
-        url 'http://maven.springframework.org/release'
-    }
+    maven { url 'http://maven.springframework.org/release' }
+    maven { url "http://maven.restlet.org" }
 }
 
 configurations.all {
@@ -66,8 +64,11 @@ dependencies {
     compile("com.netflix.archaius:archaius-core:0.7.1")
     
     //Apache Camel dependencies
+    compile("org.apache.camel:camel-spring-boot:${camelVersion}")
     compile("org.apache.camel:camel-servlet:${camelVersion}")
     compile("org.apache.camel:camel-spring-javaconfig:${camelVersion}")
+    compile("org.apache.camel:camel-test-spring:${camelVersion}")
+    compile("org.apache.camel:camel-restlet:${camelVersion}")
     
     compile("org.springframework:spring-jms")
     
