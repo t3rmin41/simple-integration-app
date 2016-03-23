@@ -3,6 +3,7 @@ package com.simple.integration.platform.config;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 import org.apache.camel.spring.SpringCamelContext;
+import org.apache.camel.spring.javaconfig.CamelConfiguration;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +14,7 @@ import com.simple.integration.platform.router.SimpleBusinessProcessRouter;
 import com.simple.integration.platform.router.SimpleRouter;
 
 @Configuration
-public class CamelConfig {
+public class CamelConfig extends CamelConfiguration {
 
     private static final String CAMEL_URL_MAPPING = "/camel/*";
     private static final String CAMEL_SERVLET_NAME = "CamelServlet";
@@ -25,7 +26,7 @@ public class CamelConfig {
         return registration;
     }
 
-    @Bean
+    @Bean(name = "camelContext")
     public SpringCamelContext camelContext(ApplicationContext applicationContext) throws Exception {
         SpringCamelContext camelContext = new SpringCamelContext(applicationContext);
         //Adding routes to Camel context so that direct: will be visible and direct: routes (from,to) can be used

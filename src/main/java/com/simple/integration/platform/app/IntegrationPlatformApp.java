@@ -37,5 +37,6 @@ public class IntegrationPlatformApp {
         
         ApplicationContext context = SpringApplication.run(new Class<?>[] {IntegrationPlatformApp.class}, args);
         log.info("Application context ID : " + context.getId());
+
     }
 }

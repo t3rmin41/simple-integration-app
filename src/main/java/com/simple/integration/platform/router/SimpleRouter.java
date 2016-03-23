@@ -30,9 +30,9 @@ public class SimpleRouter extends RouteBuilder {
     }
     
     private void queueRoute() {
-        from("activemq:jms.queue").startupOrder(4).
+        from("activemq:queue:jms.queue").startupOrder(4).
         to("log:com.simple.integration.platform.router.SimpleRouter?level=INFO").
-        to("activemq:jms.queue");
+        to("activemq:queue:jms.queue");
     }
     
     private void processRoute() {

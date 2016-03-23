@@ -17,11 +17,12 @@ public class ResponseProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+        String soapResponseIn = exchange.getIn().getBody(String.class);
         ObjectNode root = mapper.createObjectNode();
         ObjectNode response = mapper.createObjectNode();
         response.put("status", "OK");
-        //TODO FIXME
-        root.set("response", response); // put("response", response);
+        root.put("response", soapResponseIn);
+        root.set("result", response);
         String ret = mapper.writeValueAsString(root);
         log.info("Response: {}", ret);
         exchange.getOut().setBody(ret);

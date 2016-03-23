@@ -31,6 +31,8 @@ public class RemoteWebserviceProcessor implements Processor {
         
         log.info(soapResponse.getSOAPBody().getTextContent());
         
+        log.info("SOAP response : {}", soapResponse.getSOAPBody().getTextContent());
+        exchange.getOut().setBody(soapResponse.getSOAPBody().getTextContent(), String.class);
         soapConnection.close();
     }
 
