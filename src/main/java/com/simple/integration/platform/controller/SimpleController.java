@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,15 @@ public class SimpleController {
         jmsSender.sendText("hellooooo " + new Date());
         JmsReceiver jmsReceiver = (JmsReceiver) context.getBean("jmsMqReceiver");
         return jmsReceiver.getMessage();
+    }
+    
+    @RequestMapping(value = "/queue/country/{country}", method = RequestMethod.GET)
+    public String queueCountry(@PathVariable String country) {
+        JmsSender jmsSender = (JmsSender) context.getBean("jmsMqSender");
+        jmsSender.sendText(country);
+        JmsReceiver jmsReceiver = (JmsReceiver) context.getBean("jmsMqReceiver");
+        String message = jmsReceiver.getMessage();
+        return message;
     }
     
 }
