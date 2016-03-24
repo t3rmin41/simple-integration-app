@@ -25,15 +25,18 @@ public class RemoteWebserviceProcessor implements Processor {
     
     @Override
     public void process(Exchange exchange) throws Exception {
+        log.info("Message body : " + exchange.getIn().getBody(String.class));
+        
         SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
         SOAPConnection soapConnection = soapConnectionFactory.createConnection();
         SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(), remoteURL);
         
-        log.info(soapResponse.getSOAPBody().getTextContent());
-        
         log.info("SOAP response : {}", soapResponse.getSOAPBody().getTextContent());
-        exchange.getOut().setBody(soapResponse.getSOAPBody().getTextContent(), String.class);
+        
         soapConnection.close();
+        
+        // Chain the request
+        exchange.getOut().setBody(soapResponse.getSOAPBody().getTextContent(), String.class);
     }
 
     private SOAPMessage createSOAPRequest() throws Exception {

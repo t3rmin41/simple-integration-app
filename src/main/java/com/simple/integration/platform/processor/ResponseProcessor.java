@@ -1,11 +1,15 @@
 package com.simple.integration.platform.processor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -17,14 +21,15 @@ public class ResponseProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+        
         String soapResponseIn = exchange.getIn().getBody(String.class);
-        ObjectNode root = mapper.createObjectNode();
-        ObjectNode response = mapper.createObjectNode();
-        response.put("status", "OK");
-        root.put("response", soapResponseIn);
-        root.set("result", response);
-        String ret = mapper.writeValueAsString(root);
+        Map<String, String> jsonMap = new HashMap<String, String>();
+        jsonMap.put("response", soapResponseIn);
+        jsonMap.put("status", "OK");
+        String ret = mapper.writeValueAsString(jsonMap);
         log.info("Response: {}", ret);
+        
+        // Chain the request
         exchange.getOut().setBody(ret);
     }
 }
