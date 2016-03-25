@@ -1,5 +1,8 @@
 package com.simple.integration.platform.processor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPBody;
@@ -15,6 +18,8 @@ import org.apache.camel.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component("webserviceProcessor")
 public class RemoteWebserviceProcessor implements Processor {
@@ -35,8 +40,12 @@ public class RemoteWebserviceProcessor implements Processor {
         
         soapConnection.close();
         
+        Map<String, String> jsonMap = new HashMap<String, String>();
+        jsonMap.put("response", soapResponse.getSOAPBody().getTextContent());
+        String soapResponseAsJson = new ObjectMapper().writeValueAsString(jsonMap);
+        
         // Chain the request
-        exchange.getOut().setBody(soapResponse.getSOAPBody().getTextContent(), String.class);
+        exchange.getOut().setBody(soapResponseAsJson, String.class);
     }
 
     private SOAPMessage createSOAPRequest() throws Exception {

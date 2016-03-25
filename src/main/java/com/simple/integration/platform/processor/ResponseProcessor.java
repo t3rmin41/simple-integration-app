@@ -23,8 +23,8 @@ public class ResponseProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
         
         String soapResponseIn = exchange.getIn().getBody(String.class);
-        Map<String, String> jsonMap = new HashMap<String, String>();
-        jsonMap.put("response", soapResponseIn);
+        Map<String, String> jsonMap = mapper.readValue(soapResponseIn, new TypeReference<HashMap<String,String>>() {});
+        
         jsonMap.put("status", "OK");
         String ret = mapper.writeValueAsString(jsonMap);
         log.info("Response: {}", ret);
