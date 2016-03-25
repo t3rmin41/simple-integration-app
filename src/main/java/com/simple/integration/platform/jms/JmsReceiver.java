@@ -15,6 +15,8 @@ public class JmsReceiver implements MessageListener {
     private String message;
     
     public String getMessage() {
+        while (null == message) { //simple way to wait for queue to fill in with the message
+        }
         return message;
     }
 
@@ -28,12 +30,12 @@ public class JmsReceiver implements MessageListener {
             TextMessage textMessage = (TextMessage) message;
             try {
                 String text = textMessage.getText();
-                setMessage("Received: " + text);
+                setMessage("Received message : " + text);
             } catch (JMSException e) {
                 e.printStackTrace();
             }
         } else {
-            setMessage("Received: " + message);
+            setMessage("Received message : " + message);
         }
         log.info(this.message);
     }

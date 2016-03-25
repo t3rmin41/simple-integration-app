@@ -26,15 +26,16 @@ public class RemoteWebserviceProcessor implements Processor {
 
     private static Logger log = LoggerFactory.getLogger(RemoteWebserviceProcessor.class);
     
-    private static final String remoteURL = "http://localhost:7777/ws/countries.wsdl";
+    private static final String remoteURL = "http://localhost:9999/ws/countries.wsdl";
     
     @Override
     public void process(Exchange exchange) throws Exception {
-        log.info("Message body : " + exchange.getIn().getBody(String.class));
+        String requestCountry = exchange.getIn().getBody(String.class);
+        log.info("Message body : " + requestCountry);
         
         SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
         SOAPConnection soapConnection = soapConnectionFactory.createConnection();
-        SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(), remoteURL);
+        SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(requestCountry), remoteURL);
         
         log.info("SOAP response : {}", soapResponse.getSOAPBody().getTextContent());
         
@@ -48,12 +49,12 @@ public class RemoteWebserviceProcessor implements Processor {
         exchange.getOut().setBody(soapResponseAsJson, String.class);
     }
 
-    private SOAPMessage createSOAPRequest() throws Exception {
+    private SOAPMessage createSOAPRequest(String country) throws Exception {
         MessageFactory messageFactory = MessageFactory.newInstance();
         SOAPMessage soapMessage = messageFactory.createMessage();
         SOAPPart soapPart = soapMessage.getSOAPPart();
 
-        String serverURI = "http://spring.io/guides/gs-producing-web-service";
+        String serverURI = "http://my.soap.webservice.io/countries/countries-web-service";
 
         // SOAP Envelope
         SOAPEnvelope envelope = soapPart.getEnvelope();
@@ -75,7 +76,7 @@ public class RemoteWebserviceProcessor implements Processor {
         SOAPBody soapBody = envelope.getBody();
         SOAPElement soapBodyElem = soapBody.addChildElement("getCountryRequest", "coun");
         SOAPElement soapBodyElem1 = soapBodyElem.addChildElement("name", "coun");
-        soapBodyElem1.addTextNode("Spain");
+        soapBodyElem1.addTextNode(country);
 
         MimeHeaders headers = soapMessage.getMimeHeaders();
         headers.addHeader("SOAPAction", serverURI  + "getCountryRequest");

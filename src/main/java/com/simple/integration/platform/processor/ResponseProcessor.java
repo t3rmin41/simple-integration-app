@@ -26,10 +26,10 @@ public class ResponseProcessor implements Processor {
         Map<String, String> jsonMap = mapper.readValue(soapResponseIn, new TypeReference<HashMap<String,String>>() {});
         
         jsonMap.put("status", "OK");
-        String ret = mapper.writeValueAsString(jsonMap);
-        log.info("Response: {}", ret);
+        String messageOut = mapper.writeValueAsString(jsonMap);
+        log.info("Response: {}", messageOut);
         
         // Chain the request
-        exchange.getOut().setBody(ret);
+        exchange.getOut().setBody(messageOut);
     }
 }
