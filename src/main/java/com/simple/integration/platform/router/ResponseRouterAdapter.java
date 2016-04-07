@@ -8,8 +8,10 @@ public class ResponseRouterAdapter extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from("direct:com.simple.integration.platform.adapter.getResponse").
-        bean("webserviceProcessor");
+        from("direct:com.simple.integration.platform.adapter.getResponse")
+            .bean("webserviceProcessor")
+            .log("Response handled")
+            .bean("responseProcessor");
     }
 
 }

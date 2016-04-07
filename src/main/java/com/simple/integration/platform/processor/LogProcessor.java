@@ -13,10 +13,11 @@ public class LogProcessor implements Processor {
     
     @Override
     public void process(Exchange exchange) throws Exception {
-        log.info("Message body : " + exchange.getIn().getBody(String.class));
+        String requestBody = exchange.getIn().getBody(String.class);
+        log.info("Message body : " + requestBody);
 
         // Chain the request
-        exchange.getOut().setBody(exchange.getIn().getBody());
+        exchange.getOut().setBody(requestBody);
     }
 
 }

@@ -9,44 +9,45 @@ public class SimpleRouter extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         //Access using http://localhost:8888/camel/hello
-        from("servlet:///hello").startupOrder(2).
-        transform().
-        constant("Hello from Camel!");
+        from("servlet:///hello").startupOrder(2)
+        .transform()
+        .constant("Hello from Camel!");
         
         sampleRoute();
         
-        //Comment out queueRoute() method to use queue without Camel
-        queueRoute();
+        //Comment out queueSenderRoute() method to use queue without Camel
+        queueSenderRoute();
         
-        processRoute();
+        restletRouteProcessGet();
+        
+        restletRouteProcessPost();
         
         //heartbeat();
     }
 
     private void sampleRoute() {
-        from("servlet:///sample").startupOrder(3).
-        transform().
-        constant("Sample of Camel");
+        from("servlet:///sample")
+        .transform()
+        .constant("Sample of Camel");
     }
     
-    private void queueRoute() {
-        from("activemq:queue:jms.queue").startupOrder(4)
-        .to("log:com.simple.integration.platform.router.SimpleRouter?level=INFO")
-        .to("direct:com.simple.integration.platform.processor.businessProcessor")
-        .bean("responseProcessor")
-        .to("activemq:queue:jms.queue");
+    private void queueSenderRoute() {
+        from("activemq:queue:jms.sender.queue").setProperty("operation", simple("getCountryQueue"))
+        .to("direct:com.simple.integration.platform.log");
     }
     
-    private void processRoute() {
-        from("restlet:http://0.0.0.0:7090/process?restletMethod=GET").startupOrder(1). //port 7090 is started automatically
-        bean("logProcessor").
-        to("direct:com.simple.integration.platform.processor.businessProcessor").
-        bean("responseProcessor").
-        log("Response:");
+    private void restletRouteProcessGet() {
+        from("restlet:http://0.0.0.0:7090/processGet?restletMethod=GET").setProperty("operation", simple("processGet")) //port 7090 is started automatically
+        .to("direct:com.simple.integration.platform.log");
+    }
+    
+    private void restletRouteProcessPost() {
+        from("restlet:http://0.0.0.0:7090/processPost?restletMethod=POST").setProperty("operation", simple("processPostCountry")) //port 7090 is started automatically
+        .to("direct:com.simple.integration.platform.log");
     }
     
     private void heartbeat() {
-        from("timer://heartbeat?fixedRate=true&period=10s").startupOrder(5).
-        to("log:com.simple.integration.platform.router.SimpleRouter?level=INFO");
+        from("timer://heartbeat?fixedRate=true&period=10s")
+        .to("log:com.simple.integration.platform.router.SimpleRouter?level=INFO");
     }
 }

@@ -23,21 +23,22 @@ public class ActiveMqConfig {
         return connectionFactory;
     }
 
+    //JmsSender part START
     @Bean(name = "jmsTemplate")
     public JmsTemplate jmsTemplate() {
         JmsTemplate jmsTemplate = new JmsTemplate();
-        jmsTemplate.setDefaultDestination(new ActiveMQQueue("jms.queue"));
+        jmsTemplate.setDefaultDestination(new ActiveMQQueue("jms.sender.queue"));
         jmsTemplate.setConnectionFactory(jmsConnectionFactory());
         return jmsTemplate;
     }
 
-    //JmsSender part
     @Bean(name="jmsMqSender")
     public JmsSender jmsSender() {
         return new JmsSenderImpl();
     }
+    //JmsSender part END
 
-    //JmsReceiver part
+    //JmsReceiver part START
     @Bean(name="jmsMqReceiver")
     public JmsReceiver jmsReceiver() {
         return new JmsReceiver();
@@ -47,8 +48,9 @@ public class ActiveMqConfig {
     public DefaultMessageListenerContainer messageListenerContainer() {
         DefaultMessageListenerContainer messageListenerContainer = new DefaultMessageListenerContainer();
         messageListenerContainer.setConnectionFactory(jmsConnectionFactory());
-        messageListenerContainer.setDestinationName("jms.queue");
+        messageListenerContainer.setDestinationName("jms.receiver.queue");
         messageListenerContainer.setMessageListener(jmsReceiver());
         return messageListenerContainer;
     }
+    //JmsReceiver part END
 }

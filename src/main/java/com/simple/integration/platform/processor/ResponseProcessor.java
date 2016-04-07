@@ -17,18 +17,28 @@ public class ResponseProcessor implements Processor {
 
     private static Logger log = LoggerFactory.getLogger(ResponseProcessor.class);
     private ObjectMapper mapper = new ObjectMapper();
-
+    private String responseString;
+    private Map<String, String> jsonMap = new HashMap<String, String>();
+    
     @Override
     public void process(Exchange exchange) throws Exception {
         
-        String soapResponseIn = exchange.getIn().getBody(String.class);
-        Map<String, String> jsonMap = mapper.readValue(soapResponseIn, new TypeReference<HashMap<String,String>>() {});
-        
+        String responseIn = exchange.getIn().getBody(String.class);
+        if (responseIn != null) {
+            jsonMap = mapper.readValue(responseIn, new TypeReference<HashMap<String,String>>() {});
+        }
         jsonMap.put("status", "OK");
         String messageOut = mapper.writeValueAsString(jsonMap);
         log.info("Response: {}", messageOut);
         
+        responseString = messageOut;
+        
         // Chain the request
         exchange.getOut().setBody(messageOut);
     }
+
+    public String getResponse() {
+        return responseString;
+    }
+
 }
