@@ -24,7 +24,7 @@ public class ActiveMqConfig {
     }
 
     //JmsSender part START
-    @Bean(name = "jmsTemplate")
+    @Bean(name = "jmsTemplate") // this jmsTemplate will be autowired in JmsSenderImpl
     public JmsTemplate jmsTemplate() {
         JmsTemplate jmsTemplate = new JmsTemplate();
         jmsTemplate.setDefaultDestination(new ActiveMQQueue("jms.sender.queue"));

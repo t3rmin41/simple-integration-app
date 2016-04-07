@@ -16,6 +16,8 @@ public class SimpleRouter extends RouteBuilder {
         sampleRoute();
         
         //Comment out queueSenderRoute() method to use queue without Camel
+        //and also use the same queue name (e.g. "jms.queue" for both sender and receiver)
+        //, not separate like now : "jms.sender.queue" for "jmsMqSender" bean & "jms.receiver.queue" for "jmsMqReceiver" bean)
         queueSenderRoute();
         
         restletRouteProcessGet();
